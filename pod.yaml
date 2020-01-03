@@ -43,7 +43,7 @@ metadata:
 spec:
   containers:
   - name: camelapp  
-    image: dhaneshande/camelapp:1
+    image: dhaneshande/camelapp:latest
     imagePullPolicy: IfNotPresent
     ports:
     - containerPort: 8080
