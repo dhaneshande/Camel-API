@@ -37,7 +37,7 @@ public class CamelAppStarter implements CamelContextAware, CommandLineRunner {
 	// Declaring Logger Object
 	private static Logger logger = Logger.getLogger(LogComponent.class);
 	// Declaring and initializing routeFolder path
-	private static String routesFolder = "C:\\Users\\mthadi\\eclipse-workspace-01\\camel-api-v3-log\\routes\\";
+	private static String routesFolder = "//routes";
 	
 	/**
 	 * 
