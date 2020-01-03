@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://camel.apache.org/schema/spring">
+	<route id="I1011ITX">
+		<from uri="wmq:queue:DEV.QUEUE.2" />
+			 <setProperty propertyName="token">
+				<method beanType="com.miracle.camel.service.ITXService"/>
+			</setProperty>
+			<routingSlip>
+				<header>token</header>
+			</routingSlip>
+	</route>
+</routes>

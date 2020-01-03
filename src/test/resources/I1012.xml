@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://camel.apache.org/schema/spring">
+	<route id="I1012">
+		<from uri="wmq:queue:DEV.QUEUE.1?selector=scenarioId%3D'I1012'" />
+			<marshal ref="baseWith64"/>
+			<unmarshal ref="baseWith64"/>
+		<to uri=""/>
+	</route>
+</routes>

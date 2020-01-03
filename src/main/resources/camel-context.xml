@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:camel="http://camel.apache.org/schema/spring"
+	xmlns:util="http://camel.apache.org/schema/util"
+	xsi:schemaLocation="
+          http://www.springframework.org/schema/beans 
+          http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+          http://camel.apache.org/schema/spring 
+          http://camel.apache.org/schema/spring/camel-spring.xsd
+         http://www.springframework.org/schema/util
+         http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+	<import resource="loadRoutes.xml" />
+	<camel:camelContext
+		xmlns="http://camel.apache.org/schema/spring">
+		<camel:jmxAgent id="agent" createConnector="true"
+			registryPort="8822" usePlatformMBeanServer="true" />
+		<camel:routeContextRef ref="loadRoutes"></camel:routeContextRef>
+		<camel:dataFormats>
+			<camel:base64 lineLength="64" id="baseWith64" />
+		</camel:dataFormats>
+		<camel:onException>
+			<camel:exception>com.miracle.camel.exception.ExceptionProcessor</camel:exception>
+			<camel:redeliveryPolicy
+				maximumRedeliveries="2" />
+		</camel:onException>
+	</camel:camelContext>
+
+	<!-- LOGGING -->
+	<bean name="log"
+		class="org.apache.camel.component.log.LogComponent">
+		<property name="exchangeFormatter" ref="CustomLogger" />
+	</bean>
+	<bean id="CustomLogger"
+		class="com.miracle.camel.log.CustomLogger" />
+
+	<bean id="nettyHttpBootstrapOptions"
+		class="org.apache.camel.component.netty.NettyServerBootstrapConfiguration">
+		<property name="backlog" value="200" />
+		<property name="workerCount" value="16" />
+	</bean>
+
+
+	<!-- <bean id="messageLogger" class="com.miracle.camel.log.MessageLogger" 
+		/> -->
+
+	<bean id="compressProcessor"
+		class="com.miracle.camel.utility.CompressProcessor" />
+
+	<bean id="decompressProcessor"
+		class="com.miracle.camel.utility.DeCompressProcessor" />
+
+	<bean id="encodeProcessor"
+		class="com.miracle.camel.utility.EncodeProcessor" />
+
+	<bean id="decodeProcessor"
+		class="com.miracle.camel.utility.DecodeProcessor" />
+
+	<bean id="transProcessor"
+		class="com.miracle.camel.utility.TransProcessor" />
+
+	<bean id="iTXProcessor"
+		class="com.miracle.itx.utility.ITXProcessor" />
+
+	<bean id="wmq" class="org.apache.camel.component.jms.JmsComponent">
+		<property name="connectionFactory" ref="credentials" />
+	</bean>
+
+	<bean id="credentials"
+		class="org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter">
+		<property name="targetConnectionFactory"
+			ref="myConnectionFactory" />
+		<property name="username" value="admin" />
+		<property name="password" value="passw0rd" />
+	</bean>
+
+	<bean id="myConnectionFactory"
+		class="com.ibm.mq.jms.MQQueueConnectionFactory">
+		<property name="hostName" value="172.17.3.31" />
+		<property name="port" value="1414" />
+		<property name="queueManager" value="QM1" />
+		<property name="channel" value="DEV.ADMIN.SVRCONN" />
+		<property name="transportType" value="1" />
+		<!-- <property name="appName" value="${connectionName}" /> -->
+		<!-- <property name="sSLCipherSuite" value="${SSLCipherCuite}" /> -->
+	</bean>
+
+</beans>
