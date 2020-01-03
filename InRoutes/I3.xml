@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://camel.apache.org/schema/spring">
+	<route id="I0003">
+		<from uri="wmq:queue:DEV.QUEUE.1?selector=scenarioId%3D'I0003'" />
+		<marshal ref="baseWith64">
+			<base64 />
+		</marshal>
+		<!-- <log message="${body}" loggingLevel="DEBUG" loggerRef="messageLogger"/> -->
+		<log message="${body}" logName="EntryToExit" loggingLevel="DEBUG"
+			loggerRef="messageLogger" />
+		<!-- <log message="${id}" logName="EntryToExit" loggingLevel="DEBUG"
+			loggerRef="messageLogger" /> -->
+		<!-- <to uri="log:customLogger" /> -->
+		<to uri="wmq:queue:TEST.QUEUE.1" />
+		<!-- <to uri="log:customLogger?level=INFO" /> -->
+	</route>
+</routes>

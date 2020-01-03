@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://camel.apache.org/schema/spring">
+	<route id="I1010">
+		<from uri="wmq:queue:DEV.QUEUE.1?selector=scenarioId%3D'I1010'" />
+		<from uri="netty-http:http://localhost:8222/camel/I1010"/>
+			<transform>
+				<simple>${bodyAs{String}}</simple>
+			</transform>
+			<choice>
+				<when>
+					<xpath>//country='US'</xpath>
+					<to uri="wmq:queue:DEV.QUEUE.1"/>
+				</when>
+				<when>
+					<xpath>//country='WW'</xpath>
+					<to uri="wmq:queue:DEV.QUEUE.2"/>
+				</when>
+				<otherwise>
+					<to uri="wmq:queue:DEV.QUEUE.3"/>
+				</otherwise>
+			</choice>
+	</route>
+</routes>

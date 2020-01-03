@@ -1,0 +1,65 @@
+﻿apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+    pv.kubernetes.io/provisioned-by: kubernetes.io/azure-file
+  name: routes
+spec:
+  accessModes:
+  - ReadWriteMany
+  - ReadWriteOnce
+  azureFile:
+    secretName: azure-secret
+    secretNamespace: default
+    shareName: routes
+  capacity:
+    storage: 10Gi
+  mountOptions:
+  - dir_mode=0777
+  - file_mode=0777
+  - uid=1000
+  - gid=1000
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: azurefile
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-camelapp
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: azurefile
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: camelapp
+  namespace: default
+spec:
+  containers:
+  - name: camelapp  
+    image: dhaneshande/camelapp:1
+    imagePullPolicy: IfNotPresent
+    ports:
+    - containerPort: 8080
+      protocol: TCP
+    securityContext:
+      allowPrivilegeEscalation: true
+      privileged: false
+      readOnlyRootFilesystem: false
+      runAsNonRoot: false
+      runAsUser: 0
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /routes
+      name: routes
+  volumes:
+  - name: routes
+    persistentVolumeClaim:
+      claimName: data-camelapp

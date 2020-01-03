@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration>
+	
+	<appender name="logAppenderFile"
+		class="org.apache.log4j.FileAppender">
+		<!-- fileName="${log_file_dir}${log_file_name}.log" filePattern="${log_file_dir}$${date:yyyy-MM}/${log_file_name}-%d{yyyy-MM-dd}-%i.log.zip"> -->
+		<param name="file" value="D:/logs/camel-api-logs.log" />
+		<param name="threshold" value="debug" />
+		<param name="append" value="false" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="conversionPattern" value="%m%n" />
+		</layout>
+	</appender>
+	
+	<appender name="logAppenderConsole"
+		class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="conversionPattern"
+				value="%-4r [%t] %-5p %c %x - %m%n" />
+		</layout>
+	</appender>
+
+	<logger name="log4j.rootLogger" additivity="false">
+		<level value="ALL" />
+		<appender-ref ref="logAppenderFile" />
+		<appender-ref ref="logAppenderConsole" />
+	</logger>
+
+</log4j:configuration>

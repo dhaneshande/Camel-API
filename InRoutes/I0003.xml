@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://camel.apache.org/schema/spring">
+	<route id="I0003">
+		<from uri="wmq:queue:DEV.QUEUE.1?selector=scenarioId%3D'I0003'"/>
+		<from uri="netty-http:${protocol}://$(host):$(port)/camel/I0003?bootstrapConfiguration=#nettyHttpBootstrapOptions"/>
+		<to uri="log:Inlet-log" />
+		<marshal ref="baseWith64">
+			<base64 />
+		</marshal>
+		<!-- <log message="${body}" loggingLevel="DEBUG" loggerRef="messageLogger"/> -->
+		<!-- <log message="${body}" logName="EntryToExit" loggingLevel="DEBUG" 
+			loggerRef="messageLogger" /> -->
+		<log message="${id}" logName="EntryToExit" loggingLevel="DEBUG" />
+		<to uri="log:Service-log" />
+		<to uri="wmq:queue:TEST.QUEUE.1" />
+		<to uri="log:Outlet-log" />
+	</route>
+</routes>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+          http://www.springframework.org/schema/beans 
+          http://camel.apache.org/schema/spring">
+	<bean id="jmsFactory"
+		class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL">
+			<value>tcp://172.17.3.45:61616</value>
+		</property>
+	</bean>
+	
+	<routeContext id="ExternalRoutes" xmlns="http://camel.apache.org/schema/spring">
+		<route id="consume">
+			<from uri="activemq:Source" />
+			<to uri="activemqestination" />
+		</route>
+	</routeContext>
+
+</beans>

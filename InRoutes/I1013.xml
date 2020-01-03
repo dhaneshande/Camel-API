@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://camel.apache.org/schema/spring">
+	<route id="I1013">
+		<from uri="wmq:queue:DEV.QUEUE.1?selector=scenarioId%3D'I1013'" />
+		<from uri="netty-http:http://localhost:8222/camel/I1013"/>
+		<to uri="log:Entry?level=INFO"/>
+		<marshal ref="baseWith64"><base64/></marshal>
+		<to uri="log:Encode?level=INFO"/>
+		<!-- <unmarshal ref="baseWith64"><base64/></unmarshal> -->
+		<to uri="wmq:queue:DEV.QUEUE.4" />
+		<to uri="log:Exit?level=INFO"/>
+	</route>
+</routes>
