@@ -14,8 +14,6 @@
 	<import resource="loadRoutes.xml" />
 	<camel:camelContext
 		xmlns="http://camel.apache.org/schema/spring">
-		<camel:jmxAgent id="agent" createConnector="true"
-			registryPort="8822" usePlatformMBeanServer="true" />
 		<camel:routeContextRef ref="loadRoutes"></camel:routeContextRef>
 		<camel:dataFormats>
 			<camel:base64 lineLength="64" id="baseWith64" />
@@ -80,7 +78,7 @@
 
 	<bean id="myConnectionFactory"
 		class="com.ibm.mq.jms.MQQueueConnectionFactory">
-		<property name="hostName" value="172.17.3.31" />
+		<property name="hostName" value="52.173.202.245" />
 		<property name="port" value="1414" />
 		<property name="queueManager" value="QM1" />
 		<property name="channel" value="DEV.ADMIN.SVRCONN" />
